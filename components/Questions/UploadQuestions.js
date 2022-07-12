@@ -13,7 +13,20 @@ function UploadQuestions() {
   const [explanation, setExplanation] = useState("");
   const { currentUser } = useAuth();
   const addQuestionHandler = async () => {
-    const response = await axios.post("/api/push_question", {
+    if (
+      !(
+        questionHeading &&
+        option1 &&
+        option2 &&
+        option3 &&
+        option4 &&
+        answer &&
+        explanation &&
+        subject_name
+      )
+    )
+      return;
+    const response = await axios.post("/api/pushQuestion", {
       title: questionHeading,
       option1: option1,
       option2: option2,
@@ -24,6 +37,12 @@ function UploadQuestions() {
       author_email: currentUser._delegate.email,
       explanation: explanation,
       subject_name: subject,
+    });
+    const { questionId } = response.data;
+    console.log(questionId);
+    await axios.post("/api/addQuestionToUserProfile", {
+      user: currentUser._delegate.email,
+      questionId: questionId,
     });
   };
   const subjectChangeHandler = (e) => {
@@ -46,7 +65,7 @@ function UploadQuestions() {
     }
   };
   return (
-    <htmlForm className="m-5 w-3/4 ml-40">
+    <div className="m-5 w-4/5 mx-auto">
       <div className="relative z-0 w-full mb-6 group">
         <input
           type="text"
@@ -143,7 +162,7 @@ function UploadQuestions() {
             id="opt4"
             placeholder=" "
             className="block py-2.5 px-0 w-full  text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark: dark:border-gray-600 dark:focus:border-teal-500 focus:outline-none focus:ring-0 focus:border-teal-600 peer"
-            onChange={(e) => setOption1(e.target.value)}
+            onChange={(e) => setOption4(e.target.value)}
             required
           />
           <label
@@ -199,7 +218,7 @@ function UploadQuestions() {
           Submit
         </button>
       </div>
-    </htmlForm>
+    </div>
   );
 }
 

@@ -12,7 +12,7 @@ function Subject() {
   const [questionId, setQuestionId] = useState([]);
   const getQuestions = async () => {
     if (subject) {
-      const response = await axios.post("/api/retrieve_question", {
+      const response = await axios.post("/api/retrieveQuestion", {
         subject_name: subject,
       });
       setQuestionId(response.data);

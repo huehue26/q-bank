@@ -32,9 +32,7 @@ export default async function Users(req, res) {
       explanation: req.body.explanation,
       id: id_,
     });
-
-    console.log("question Posted");
-    res.json({ questionPosted: req.body });
+    res.json({ questionId: id_ });
   } else {
     res.json({ message: "This request is not allowed", user: false });
   }
