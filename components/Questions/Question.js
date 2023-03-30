@@ -9,7 +9,11 @@ function Question(props) {
   const [redeemPoints, setRedeemPoints] = useState(0);
   const route = useRouter();
   const { currentUser } = useAuth();
+
   const redeemPointHandler = async () => {
+    if (!currentUser) {
+      return
+    }
     const response = await axios.post("/api/redeemPoints", {
       question_id: props.id,
       email: currentUser._delegate.email,
@@ -38,6 +42,8 @@ function Question(props) {
     }
   };
   const checkQuestionAccess = async () => {
+    if (!currentUser)
+      return
     const response = await axios.post("/api/checkQuestionAcceptance", {
       question_id: props.id,
       userEmail: currentUser._delegate.email,
